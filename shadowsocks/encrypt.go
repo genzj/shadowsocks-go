@@ -5,6 +5,7 @@ import (
 	"golang.org/x/crypto/blowfish"
 	"golang.org/x/crypto/cast5"
 	"golang.org/x/crypto/salsa20/salsa"
+	"github.com/codahale/chacha20"
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/des"
@@ -163,6 +164,10 @@ func newSalsa20Stream(key, iv []byte, _ DecOrEnc) (cipher.Stream, error) {
 	return &c, nil
 }
 
+func newChaCha20Stream(key, iv []byte, _ DecOrEnc) (cipher.Stream, error) {
+	return chacha20.New(key, iv)
+}
+
 type cipherInfo struct {
 	keyLen    int
 	ivLen     int
@@ -180,6 +185,7 @@ var cipherMethod = map[string]*cipherInfo{
 	"rc4":         {16, 0, nil},
 	"table":       {16, 0, nil},
 	"salsa20":     {32, 8, newSalsa20Stream},
+	"chacha20":    {32, 8, newChaCha20Stream},
 }
 
 func CheckCipherMethod(method string) error {
