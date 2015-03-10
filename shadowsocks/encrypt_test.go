@@ -166,9 +166,9 @@ func BenchmarkRC4Init(b *testing.B) {
 
 func benchmarkCipherInit(b *testing.B, ci *cipherInfo) {
 	key := cipherKey[:ci.keyLen]
-	buf := make([]byte, ci.ivLen)
+	iv := cipherIv[:ci.ivLen]
 	for i := 0; i < b.N; i++ {
-		ci.newStream(key, buf, Encrypt)
+		ci.newStream(key, iv, Encrypt)
 	}
 }
 
@@ -204,6 +204,11 @@ func BenchmarkDESInit(b *testing.B) {
 
 func BenchmarkRC4MD5Init(b *testing.B) {
 	ci := cipherMethod["rc4-md5"]
+	benchmarkCipherInit(b, ci)
+}
+
+func BenchmarkSalsa20Init(b *testing.B) {
+	ci := cipherMethod["salsa20"]
 	benchmarkCipherInit(b, ci)
 }
 
@@ -249,6 +254,16 @@ func BenchmarkCast5Encrypt(b *testing.B) {
 
 func BenchmarkDESEncrypt(b *testing.B) {
 	ci := cipherMethod["des-cfb"]
+	benchmarkCipherEncrypt(b, ci)
+}
+
+func BenchmarkRC4MD5Encrypt(b *testing.B) {
+	ci := cipherMethod["rc4-md5"]
+	benchmarkCipherEncrypt(b, ci)
+}
+
+func BenchmarkSalsa20Encrypt(b *testing.B) {
+	ci := cipherMethod["salsa20"]
 	benchmarkCipherEncrypt(b, ci)
 }
 
@@ -299,6 +314,16 @@ func BenchmarkCast5Decrypt(b *testing.B) {
 
 func BenchmarkDESDecrypt(b *testing.B) {
 	ci := cipherMethod["des-cfb"]
+	benchmarkCipherDecrypt(b, ci)
+}
+
+func BenchmarkRC4MD5Decrypt(b *testing.B) {
+	ci := cipherMethod["rc4-md5"]
+	benchmarkCipherDecrypt(b, ci)
+}
+
+func BenchmarkSalsa20Decrypt(b *testing.B) {
+	ci := cipherMethod["salsa20"]
 	benchmarkCipherDecrypt(b, ci)
 }
 
