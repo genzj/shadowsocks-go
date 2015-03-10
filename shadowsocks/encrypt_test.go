@@ -212,6 +212,11 @@ func BenchmarkSalsa20Init(b *testing.B) {
 	benchmarkCipherInit(b, ci)
 }
 
+func BenchmarkChacha20Init(b *testing.B) {
+	ci := cipherMethod["chacha20"]
+	benchmarkCipherInit(b, ci)
+}
+
 func benchmarkCipherEncrypt(b *testing.B, ci *cipherInfo) {
 	key := cipherKey[:ci.keyLen]
 	iv := cipherIv[:ci.ivLen]
@@ -264,6 +269,11 @@ func BenchmarkRC4MD5Encrypt(b *testing.B) {
 
 func BenchmarkSalsa20Encrypt(b *testing.B) {
 	ci := cipherMethod["salsa20"]
+	benchmarkCipherEncrypt(b, ci)
+}
+
+func BenchmarkChacha20Encrypt(b *testing.B) {
+	ci := cipherMethod["chacha20"]
 	benchmarkCipherEncrypt(b, ci)
 }
 
@@ -324,6 +334,11 @@ func BenchmarkRC4MD5Decrypt(b *testing.B) {
 
 func BenchmarkSalsa20Decrypt(b *testing.B) {
 	ci := cipherMethod["salsa20"]
+	benchmarkCipherDecrypt(b, ci)
+}
+
+func BenchmarkChacha20Decrypt(b *testing.B) {
+	ci := cipherMethod["chacha20"]
 	benchmarkCipherDecrypt(b, ci)
 }
 
