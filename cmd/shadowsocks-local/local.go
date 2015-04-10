@@ -5,7 +5,6 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	ss "github.com/shadowsocks/shadowsocks-go/shadowsocks"
 	"io"
 	"log"
 	"math/rand"
@@ -14,6 +13,9 @@ import (
 	"path"
 	"strconv"
 	"time"
+
+	"github.com/howeyc/gopass"
+	ss "github.com/shadowsocks/shadowsocks-go/shadowsocks"
 )
 
 var debug ss.DebugLog
@@ -158,6 +160,11 @@ var servers struct {
 	failCnt   []int // failed connection count
 }
 
+func getPassword() string {
+	fmt.Printf("Password: ")
+	return string(gopass.GetPasswdMasked())
+}
+
 func parseServerConfig(config *ss.Config) {
 	hasPort := func(s string) bool {
 		_, port, err := net.SplitHostPort(s)
@@ -174,6 +181,9 @@ func parseServerConfig(config *ss.Config) {
 			log.Fatal("Failed generating ciphers:", err)
 		}
 		srvPort := strconv.Itoa(config.ServerPort)
+		if config.Password == "INPUT" {
+			config.Password = getPassword()
+		}
 		srvArr := config.GetServerArray()
 		n := len(srvArr)
 		servers.srvCipher = make([]*ServerCipher, n)
